@@ -112,15 +112,9 @@ namespace AzureBlobStorageModelling
             {
                 item.Items.Clear();
 
-                if (item.Tag is CloudBlobDirectory)
-                {
-                    CloudBlobDirectory expandDir = null;
-                    expandDir = (item.Tag as CloudBlobDirectory);
-                    foreach (var subDir in expandDir.ListBlobs())
-                        item.Items.Add(CreateTreeItem(subDir));
-                }
+                
 
-                else if (item.Tag is CloudBlockBlob)
+                if (item.Tag is CloudBlockBlob)
                 {
                     CloudBlockBlob blockBlob = item.Tag as CloudBlockBlob;
                     _BlobCollection.Add(new BlobItem()
@@ -136,7 +130,7 @@ namespace AzureBlobStorageModelling
                     });
                     //CloudPageBlob expandedDir = null;
                     //expandedDir = (item.Tag as CloudPageBlob);
-                    item.Items.Add(blockBlob.Name);
+                    //item.Items.Add(blockBlob.Name);
                 }
 
                else if (item.Tag is CloudPageBlob)
@@ -153,7 +147,15 @@ namespace AzureBlobStorageModelling
                         LastModified = pageBlob.Properties.LastModified.Value.DateTime,
                         LastModifiedText = pageBlob.Properties.LastModified.Value.ToString()
                     });
-                    item.Items.Add(pageBlob.Name);
+                    //item.Items.Add(pageBlob.Name);
+                }
+
+                else if (item.Tag is CloudBlobDirectory)
+                {
+                    CloudBlobDirectory expandDir = null;
+                    expandDir = (item.Tag as CloudBlobDirectory);
+                    foreach (var subDir in expandDir.ListBlobs())
+                        item.Items.Add(CreateTreeItem(subDir));
                 }
 
                 else
